@@ -1,9 +1,9 @@
-import { Camera, Euler, Vector3 } from "three";
+import { Euler, Vector3 } from "three";
 import { useFrame } from "@react-three/fiber";
-import Cube, { CubeProps } from "../objects/cube";
 import { VehiculeInformations } from "../../display";
-import { PerspectiveCamera } from "@react-three/drei";
-import { useRef } from "react";
+import { Box } from "@react-three/drei";
+import React from "react";
+import FollowingCamera from "./following-camera";
 
 export type VehiculeProps = VehiculeInformations & {
   handleClick: () => void;
@@ -35,34 +35,39 @@ const Vehicule = ({ informations, handleClick }: VehiculeProps) => {
   const rotation = new Euler(xRotation, yRotation, zRotation);
   const scale = new Vector3(xScale, yScale, zScale);
 
-  const cameraRef = useRef<Camera>(null);
-
   const renderFunction = (value: number): void => {
     setYRotation(yRotation + 0.01);
-    setXPosition(4 * Math.sin(value));
+    setZPosition(4 * Math.sin(value));
+    setXPosition(4 * Math.cos(value));
   };
 
   useFrame(({ clock }) => {
     renderFunction(clock.getElapsedTime());
-
-    if (cameraRef.current) {
-      cameraRef.current.lookAt(position);
-    }
   });
 
   return (
-    <Cube
-      position={position}
-      rotation={rotation}
-      scale={scale}
-      handleClick={handleClick}
-    >
-      <PerspectiveCamera
-        ref={cameraRef}
-        makeDefault
-        position={new Vector3(-2, 1, -2)}
+    <group position={position} rotation={rotation} scale={scale}>
+      <Box
+        args={[1, 1, 1]}
+        onClick={handleClick}
+        position={new Vector3(0, 0, 0)}
+      >
+        <meshStandardMaterial attach="material" color="white" />
+      </Box>
+      <Box
+        args={[1, 1, 1]}
+        onClick={handleClick}
+        position={new Vector3(0, 0, 4)}
+      >
+        <meshStandardMaterial attach="material" color="red" />
+      </Box>
+      <FollowingCamera
+        cameraDistance={4.1}
+        vehiculePosition={position}
+        vehiculeRotation={rotation}
+        cameraPosition={new Vector3(0, 2, -4.1)}
       />
-    </Cube>
+    </group>
   );
 };
 

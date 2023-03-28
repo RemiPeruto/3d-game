@@ -7,7 +7,6 @@ export type CubeProps = {
   rotation: Euler;
   scale: Vector3;
   handleClick: () => void;
-  children?: JSX.Element;
 };
 
 const Cube = ({
@@ -15,13 +14,11 @@ const Cube = ({
   rotation,
   scale = new Vector3(1, 1, 1),
   handleClick,
-  children,
 }: CubeProps) => (
   <group position={position} rotation={rotation} scale={scale}>
     <Box args={[1, 1, 1]} onClick={handleClick}>
       <meshStandardMaterial attach="material" color="white" />
     </Box>
-    {children !== undefined && children}
   </group>
 );
 
