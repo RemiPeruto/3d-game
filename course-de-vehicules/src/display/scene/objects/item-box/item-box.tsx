@@ -3,7 +3,11 @@ import React, { useEffect, useState } from "react";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
-const ItemBox = () => {
+type ItemBoxProps = {
+  position: Vector3;
+};
+
+const ItemBox = ({ position }: ItemBoxProps) => {
   const itemBox = "assets/mario_kart_item_box/scene.gltf"; //https://sketchfab.com/3d-models/mario-kart-item-box-8f6a2b6b17b844c5b5dfa38375289975
   const gltf = useLoader(GLTFLoader, itemBox);
   const [rotation, setRotation] = useState<Euler>(new Euler(0, 0, 0));
@@ -19,7 +23,7 @@ const ItemBox = () => {
   });
 
   return (
-    <group rotation={rotation} position={new Vector3(4, 1, 0)}>
+    <group rotation={rotation} position={position}>
       <primitive object={gltf.scene} position={new Vector3(0, 0, 0)} />
     </group>
   );

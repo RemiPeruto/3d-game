@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Controls from "./controls/controls";
 import { DisplayContainer } from "./display.style";
 import MyScene from "./scene/scene";
+import { Euler, Vector3 } from "three";
 
 export type VehiculeInformations = {
   informations: {
@@ -35,14 +36,17 @@ const actionMapKeys: Record<Action, string[]> = {
   right: ["arrowright", "d"],
 };
 
-const Display = () => {
-  const [xPosition, setXPosition] = useState(0);
-  const [yPosition, setYPosition] = useState(0);
-  const [zPosition, setZPosition] = useState(0);
+export const positionInit = new Vector3(-37.6, 0, 7.5);
+const rotationInit = new Euler(0, -3.1, 0);
 
-  const [xRotation, setXRotation] = useState(0);
-  const [yRotation, setYRotation] = useState(0);
-  const [zRotation, setZRotation] = useState(0);
+const Display = () => {
+  const [xPosition, setXPosition] = useState(positionInit.x);
+  const [yPosition, setYPosition] = useState(positionInit.y);
+  const [zPosition, setZPosition] = useState(positionInit.z);
+
+  const [xRotation, setXRotation] = useState(rotationInit.x);
+  const [yRotation, setYRotation] = useState(rotationInit.y);
+  const [zRotation, setZRotation] = useState(rotationInit.z);
 
   const [xScale, setXScale] = useState(1);
   const [yScale, setYScale] = useState(1);
