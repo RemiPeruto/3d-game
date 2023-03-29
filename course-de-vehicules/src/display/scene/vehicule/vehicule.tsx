@@ -39,6 +39,7 @@ const Vehicule = ({ informations, actionMapActive }: VehiculeProps) => {
   const renderFunction = (dt: number): void => {
     let dL = new Vector3(0, 0, 0);
     let dtheta = new Vector3(0, 0, 0);
+    const scalingScalar = dt * 10;
 
     if (actionMapActive.forward) {
       dL.add(new Vector3(0, 0, 1));
@@ -47,18 +48,20 @@ const Vehicule = ({ informations, actionMapActive }: VehiculeProps) => {
       dL.add(new Vector3(0, 0, -1));
     }
     if (actionMapActive.left) {
-      dL.add(new Vector3(1, 0, 0));
+      dL.add(new Vector3(0.3, 0, 0));
       dtheta.add(new Vector3(0, 1, 0));
     }
     if (actionMapActive.right) {
-      dL.add(new Vector3(-1, 0));
+      dL.add(new Vector3(-0.3, 0));
       dtheta.add(new Vector3(0, -1, 0));
     }
-    dL.multiplyScalar(dt);
+
+    dL.multiplyScalar(scalingScalar);
     dL.applyEuler(rotation);
     dL.add(new Vector3(xPosition, yPosition, zPosition));
-    dtheta.multiplyScalar(0.041);
+    dtheta.multiplyScalar(scalingScalar * 0.3);
     dtheta.add(new Vector3(xRotation, yRotation, zRotation));
+
     setXPosition(dL.x);
     setYPosition(dL.y);
     setZPosition(dL.z);
