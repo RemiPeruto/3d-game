@@ -74,6 +74,47 @@ const Display = () => {
     return Object.values(keyMapAction).includes(action);
   };
 
+  const updateActionActiveStatus = (action: Action, active: boolean): void => {
+    setActionMapActive((actionMapActive) => ({
+      ...actionMapActive,
+      [action]: active,
+    }));
+  };
+
+  const renderFunction = (dt: number): void => {
+    let dL = new Vector3(0, 0, 0);
+    let dtheta = new Vector3(0, 0, 0);
+    const scalingScalar = dt * 10;
+
+    if (actionMapActive.forward) {
+      dL.add(new Vector3(0, 0, 1));
+    }
+    if (actionMapActive.backward) {
+      dL.add(new Vector3(0, 0, -1));
+    }
+    if (actionMapActive.left) {
+      dL.add(new Vector3(0.3, 0, 0));
+      dtheta.add(new Vector3(0, 1, 0));
+    }
+    if (actionMapActive.right) {
+      dL.add(new Vector3(-0.3, 0));
+      dtheta.add(new Vector3(0, -1, 0));
+    }
+
+    dL.multiplyScalar(scalingScalar);
+    dL.applyEuler(new Euler(xRotation, yRotation, zRotation));
+    dL.add(new Vector3(xPosition, yPosition, zPosition));
+    dtheta.multiplyScalar(scalingScalar * 0.3);
+    dtheta.add(new Vector3(xRotation, yRotation, zRotation));
+
+    setXPosition(dL.x);
+    setYPosition(dL.y);
+    setZPosition(dL.z);
+    setXRotation(dtheta.x);
+    setYRotation(dtheta.y);
+    setZRotation(dtheta.z);
+  };
+
   return (
     <DisplayContainer>
       <MyScene
@@ -98,6 +139,7 @@ const Display = () => {
           setZScale,
         }}
         actionMapActive={actionMapActive}
+        renderFunction={renderFunction}
       />
       <Controls
         informations={{
@@ -121,8 +163,7 @@ const Display = () => {
           setZScale,
         }}
         keyboard={{
-          actionMapActive,
-          setActionMapActive,
+          updateActionActiveStatus,
           keyMapAction,
           isControl,
         }}

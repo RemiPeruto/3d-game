@@ -11,9 +11,10 @@ import StartLine from "./start-line";
 
 type MySceneProps = VehiculeInformations & {
   actionMapActive: Record<Action, boolean>;
+  renderFunction: (dt: number) => void;
 };
 
-const MyScene = ({ informations, actionMapActive }: MySceneProps) => {
+const MyScene = ({ informations, renderFunction }: MySceneProps) => {
   return (
     <SceneContainer>
       <Canvas>
@@ -34,7 +35,7 @@ const MyScene = ({ informations, actionMapActive }: MySceneProps) => {
           <Vehicule
             handleClick={() => console.log("clicked on the vehicule")}
             informations={informations}
-            actionMapActive={actionMapActive}
+            renderFunction={renderFunction}
           />
           <ItemBox
             position={positionInit.clone().add(new Vector3(0, 1, -10))}

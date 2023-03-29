@@ -3,8 +3,7 @@ import { useEffect } from "react";
 
 type HandleKeyboardType = {
   keyboard: {
-    actionMapActive: Record<Action, boolean>;
-    setActionMapActive: (actionMapActive: Record<Action, boolean>) => void;
+    updateActionActiveStatus: (action: Action, active: boolean) => void;
     keyMapAction: Record<string, Action | undefined>;
     isControl: (action: Action) => boolean;
   };
@@ -34,8 +33,7 @@ const Controls = ({ informations, keyboard }: ControlsProps) => {
     setZScale,
   } = informations;
 
-  const { actionMapActive, setActionMapActive, keyMapAction, isControl } =
-    keyboard;
+  const { keyMapAction, isControl, updateActionActiveStatus } = keyboard;
 
   useEffect(() => {
     const downHandler = ({ key, target }: KeyboardEvent) => {
@@ -46,15 +44,14 @@ const Controls = ({ informations, keyboard }: ControlsProps) => {
         !isControl(actionName)
       )
         return;
-      setActionMapActive({ ...actionMapActive, [actionName]: true });
+      updateActionActiveStatus(actionName, true);
     };
 
     const upHandler = ({ key, target }: KeyboardEvent) => {
       const actionName = keyMapAction[key.toLowerCase()];
       if (!actionName || (target as HTMLElement).nodeName === "INPUT") return;
-      setActionMapActive({ ...actionMapActive, [actionName]: false });
+      updateActionActiveStatus(actionName, false);
     };
-
     window.addEventListener("keydown", downHandler, { passive: true });
     window.addEventListener("keyup", upHandler, { passive: true });
   }, []);
