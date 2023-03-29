@@ -1,15 +1,20 @@
 import { Euler, Vector3 } from "three";
 import { useFrame } from "@react-three/fiber";
-import { VehiculeInformations } from "../../display";
+import { Action, VehiculeInformations } from "../../display";
 import { Box } from "@react-three/drei";
-import React from "react";
+import React, { useEffect } from "react";
 import FollowingCamera from "./following-camera";
 
 export type VehiculeProps = VehiculeInformations & {
   handleClick: () => void;
+  actionMapActive: Record<Action, boolean>;
 };
 
-const Vehicule = ({ informations, handleClick }: VehiculeProps) => {
+const Vehicule = ({
+  informations,
+  handleClick,
+  actionMapActive,
+}: VehiculeProps) => {
   const {
     xRotation,
     yRotation,
@@ -35,14 +40,39 @@ const Vehicule = ({ informations, handleClick }: VehiculeProps) => {
   const rotation = new Euler(xRotation, yRotation, zRotation);
   const scale = new Vector3(xScale, yScale, zScale);
 
-  const renderFunction = (value: number): void => {
-    setYRotation(yRotation + 0.01);
-    setZPosition(4 * Math.sin(value));
-    setXPosition(4 * Math.cos(value));
+  const renderFunction = (dt: number): void => {
+    let dL = new Vector3(0, 0, 0);
+    let dtheta = new Vector3(0, 0, 0);
+
+    if (actionMapActive.forward) {
+      dL.add(new Vector3(0, 0, 1));
+    }
+    if (actionMapActive.backward) {
+      dL.add(new Vector3(0, 0, -1));
+    }
+    if (actionMapActive.left) {
+      dL.add(new Vector3(1, 0, 0));
+      dtheta.add(new Vector3(0, 1, 0));
+    }
+    if (actionMapActive.right) {
+      dL.add(new Vector3(-1, 0));
+      dtheta.add(new Vector3(0, -1, 0));
+    }
+    dL.multiplyScalar(dt);
+    dL.applyEuler(rotation);
+    dL.add(new Vector3(xPosition, yPosition, zPosition));
+    dtheta.multiplyScalar(0.041);
+    dtheta.add(new Vector3(xRotation, yRotation, zRotation));
+    setXPosition(dL.x);
+    setYPosition(dL.y);
+    setZPosition(dL.z);
+    setXRotation(dtheta.x);
+    setYRotation(dtheta.y);
+    setZRotation(dtheta.z);
   };
 
-  useFrame(({ clock }) => {
-    renderFunction(clock.getElapsedTime());
+  useFrame(({ clock }, delta) => {
+    renderFunction(delta);
   });
 
   return (

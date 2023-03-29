@@ -6,9 +6,13 @@ import Vehicule from "./vehicule";
 import { Euler, Vector3 } from "three";
 import Cube from "./objects/cube";
 import { SceneContainer } from "./scene.style";
-import { VehiculeInformations } from "../display";
+import { Action, VehiculeInformations } from "../display";
 
-const MyScene = ({ informations }: VehiculeInformations) => {
+type MySceneProps = VehiculeInformations & {
+  actionMapActive: Record<Action, boolean>;
+};
+
+const MyScene = ({ informations, actionMapActive }: MySceneProps) => {
   return (
     <SceneContainer>
       <Canvas>
@@ -30,6 +34,7 @@ const MyScene = ({ informations }: VehiculeInformations) => {
           <Vehicule
             handleClick={() => console.log("clicked on the vehicule")}
             informations={informations}
+            actionMapActive={actionMapActive}
           />
           <Cube
             handleClick={() => console.log("clicked on the cube")}

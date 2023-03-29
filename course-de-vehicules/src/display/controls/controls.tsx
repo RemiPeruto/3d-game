@@ -1,8 +1,18 @@
-import { VehiculeInformations } from "../display";
+import { Action, VehiculeInformations } from "../display";
+import { useEffect } from "react";
 
-type ControlsPropos = VehiculeInformations;
+type HandleKeyboardType = {
+  keyboard: {
+    actionMapActive: Record<Action, boolean>;
+    setActionMapActive: (actionMapActive: Record<Action, boolean>) => void;
+    keyMapAction: Record<string, Action | undefined>;
+    isControl: (action: Action) => boolean;
+  };
+};
 
-const Controls = ({ informations }: ControlsPropos) => {
+type ControlsProps = VehiculeInformations & HandleKeyboardType;
+
+const Controls = ({ informations, keyboard }: ControlsProps) => {
   const {
     xRotation,
     yRotation,
@@ -23,6 +33,31 @@ const Controls = ({ informations }: ControlsPropos) => {
     setYScale,
     setZScale,
   } = informations;
+
+  const { actionMapActive, setActionMapActive, keyMapAction, isControl } =
+    keyboard;
+
+  useEffect(() => {
+    const downHandler = ({ key, target }: KeyboardEvent) => {
+      const actionName = keyMapAction[key.toLowerCase()];
+      if (
+        !actionName ||
+        (target as HTMLElement).nodeName === "INPUT" ||
+        !isControl(actionName)
+      )
+        return;
+      setActionMapActive({ ...actionMapActive, [actionName]: true });
+    };
+
+    const upHandler = ({ key, target }: KeyboardEvent) => {
+      const actionName = keyMapAction[key.toLowerCase()];
+      if (!actionName || (target as HTMLElement).nodeName === "INPUT") return;
+      setActionMapActive({ ...actionMapActive, [actionName]: false });
+    };
+
+    window.addEventListener("keydown", downHandler, { passive: true });
+    window.addEventListener("keyup", upHandler, { passive: true });
+  }, []);
 
   return (
     <div className="controls">

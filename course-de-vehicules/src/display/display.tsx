@@ -26,6 +26,15 @@ export type VehiculeInformations = {
   };
 };
 
+export type Action = "forward" | "backward" | "left" | "right";
+
+const actionMapKeys: Record<Action, string[]> = {
+  forward: ["arrowup", "z"],
+  backward: ["arrowdown", "s"],
+  left: ["arrowleft", "q"],
+  right: ["arrowright", "d"],
+};
+
 const Display = () => {
   const [xPosition, setXPosition] = useState(0);
   const [yPosition, setYPosition] = useState(0);
@@ -38,6 +47,28 @@ const Display = () => {
   const [xScale, setXScale] = useState(1);
   const [yScale, setYScale] = useState(1);
   const [zScale, setZScale] = useState(1);
+
+  const [actionMapActive, setActionMapActive] = useState<
+    Record<Action, boolean>
+  >({
+    backward: false,
+    forward: false,
+    left: false,
+    right: false,
+  });
+
+  const keyMapAction: Record<string, Action> = Object.entries(
+    actionMapKeys
+  ).reduce((result, [action, keys]) => {
+    keys.forEach((key) => {
+      result[key] = action as Action;
+    });
+    return result;
+  }, {} as Record<string, Action>);
+
+  const isControl = (action: Action): boolean => {
+    return Object.values(keyMapAction).includes(action);
+  };
 
   return (
     <DisplayContainer>
@@ -62,6 +93,7 @@ const Display = () => {
           setYScale,
           setZScale,
         }}
+        actionMapActive={actionMapActive}
       />
       <Controls
         informations={{
@@ -83,6 +115,12 @@ const Display = () => {
           setXScale,
           setYScale,
           setZScale,
+        }}
+        keyboard={{
+          actionMapActive,
+          setActionMapActive,
+          keyMapAction,
+          isControl,
         }}
       />
     </DisplayContainer>
