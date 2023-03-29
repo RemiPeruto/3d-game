@@ -1,9 +1,10 @@
 import { Euler, Vector3 } from "three";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useLoader } from "@react-three/fiber";
 import { Action, VehiculeInformations } from "../../display";
 import { Box } from "@react-three/drei";
 import React, { useEffect } from "react";
 import FollowingCamera from "./following-camera";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 export type VehiculeProps = VehiculeInformations & {
   handleClick: () => void;
@@ -75,15 +76,11 @@ const Vehicule = ({
     renderFunction(delta);
   });
 
+  const mario = "assets/mario_kart/scene.gltf"; // https://sketchfab.com/3d-models/mario-kart-66cc131575344ab69238ec5872f24927
+  const gltf = useLoader(GLTFLoader, mario);
   return (
     <group position={position} rotation={rotation} scale={scale}>
-      <Box
-        args={[1, 1, 1]}
-        onClick={handleClick}
-        position={new Vector3(0, 0, 0)}
-      >
-        <meshStandardMaterial attach="material" color="white" />
-      </Box>
+      <primitive object={gltf.scene} position={new Vector3(0, 0, 0)} />
       <Box
         args={[1, 1, 1]}
         onClick={handleClick}
