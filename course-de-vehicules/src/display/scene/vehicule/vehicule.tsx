@@ -1,8 +1,7 @@
 import { Euler, Vector3 } from "three";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { Action, VehiculeInformations } from "../../display";
-import { Box } from "@react-three/drei";
-import React, { useEffect } from "react";
+import React from "react";
 import FollowingCamera from "./following-camera";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
@@ -11,11 +10,7 @@ export type VehiculeProps = VehiculeInformations & {
   actionMapActive: Record<Action, boolean>;
 };
 
-const Vehicule = ({
-  informations,
-  handleClick,
-  actionMapActive,
-}: VehiculeProps) => {
+const Vehicule = ({ informations, actionMapActive }: VehiculeProps) => {
   const {
     xRotation,
     yRotation,
@@ -81,13 +76,6 @@ const Vehicule = ({
   return (
     <group position={position} rotation={rotation} scale={scale}>
       <primitive object={gltf.scene} position={new Vector3(0, 0, 0)} />
-      <Box
-        args={[1, 1, 1]}
-        onClick={handleClick}
-        position={new Vector3(0, 0, 4)}
-      >
-        <meshStandardMaterial attach="material" color="red" />
-      </Box>
       <FollowingCamera
         cameraDistance={4.1}
         vehiculePosition={position}

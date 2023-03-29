@@ -7,6 +7,7 @@ import { Euler, Vector3 } from "three";
 import Cube from "./objects/cube";
 import { SceneContainer } from "./scene.style";
 import { Action, VehiculeInformations } from "../display";
+import ItemBox from "./objects/item-box";
 
 type MySceneProps = VehiculeInformations & {
   actionMapActive: Record<Action, boolean>;
@@ -36,6 +37,7 @@ const MyScene = ({ informations, actionMapActive }: MySceneProps) => {
             informations={informations}
             actionMapActive={actionMapActive}
           />
+          <ItemBox />
           <Cube
             handleClick={() => console.log("clicked on the cube")}
             rotation={new Euler(0, 0, 0)}
