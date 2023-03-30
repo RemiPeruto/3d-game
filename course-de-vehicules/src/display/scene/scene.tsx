@@ -7,7 +7,6 @@ import { SceneContainer } from "./scene.style";
 import { Action, positionInit, VehiculeInformations } from "../display";
 import ItemBox from "./objects/item-box";
 import Floor from "./floor";
-import StartLine from "./start-line";
 
 type MySceneProps = VehiculeInformations & {
   actionMapActive: Record<Action, boolean>;
@@ -46,7 +45,6 @@ const MyScene = ({ informations, renderFunction }: MySceneProps) => {
             widthSegments={10}
             heightSegments={10}
           />
-          <StartLine position={positionInit} />
         </Suspense>
       </Canvas>
     </SceneContainer>

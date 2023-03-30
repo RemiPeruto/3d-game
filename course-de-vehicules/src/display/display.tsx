@@ -36,7 +36,7 @@ const actionMapKeys: Record<Action, string[]> = {
   right: ["arrowright", "d"],
 };
 
-export const positionInit = new Vector3(-37.6, 0, 7.5);
+export const positionInit = new Vector3(-85, 0, -0.75);
 const rotationInit = new Euler(0, -3.1, 0);
 
 const Display = () => {
