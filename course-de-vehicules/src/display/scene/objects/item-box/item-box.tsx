@@ -16,10 +16,10 @@ const ItemBox = ({ position }: ItemBoxProps) => {
   }, []);
 
   useFrame((state, delta, frame) => {
-    const dtheta = new Vector3(1, 1, 1)
+    const newRotationVector = new Vector3(1, 1, 1)
       .multiplyScalar(delta)
       .add(new Vector3(rotation.x, rotation.y, rotation.z));
-    setRotation(new Euler().setFromVector3(dtheta));
+    setRotation(new Euler().setFromVector3(newRotationVector));
   });
 
   return (
