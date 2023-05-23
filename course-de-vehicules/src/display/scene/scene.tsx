@@ -4,16 +4,22 @@ import { OrbitControls, Text } from "@react-three/drei";
 import Vehicule from "./vehicule";
 import { Vector3 } from "three";
 import { SceneContainer } from "./scene.style";
-import { Action, positionInit, VehiculeInformations } from "../display";
+import {
+  Action,
+  BoiteRotationInformations,
+  positionInit,
+  VehiculeInformations,
+} from "../display";
 import ItemBox from "./objects/item-box";
 import Floor from "./floor";
 
-type MySceneProps = VehiculeInformations & {
-  actionMapActive: Record<Action, boolean>;
-  renderFunction: (dt: number) => void;
-};
+type MySceneProps = VehiculeInformations &
+  BoiteRotationInformations & {
+    actionMapActive: Record<Action, boolean>;
+    renderFunction: (dt: number) => void;
+  };
 
-const MyScene = ({ informations, renderFunction }: MySceneProps) => {
+const MyScene = ({ informations, renderFunction, boite }: MySceneProps) => {
   return (
     <SceneContainer>
       <Canvas>
@@ -38,6 +44,8 @@ const MyScene = ({ informations, renderFunction }: MySceneProps) => {
           />
           <ItemBox
             position={positionInit.clone().add(new Vector3(0, 1, -10))}
+            rotation={boite.rotation}
+            setRotation={boite.setRotation}
           />
           <Floor
             width={200}

@@ -5,12 +5,14 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 type ItemBoxProps = {
   position: Vector3;
+  rotation: Euler;
+  setRotation: (rotation: Euler) => void;
 };
 
-const ItemBox = ({ position }: ItemBoxProps) => {
+const ItemBox = ({ position, rotation, setRotation }: ItemBoxProps) => {
   const itemBox = "assets/mario_kart_item_box/scene.gltf"; //https://sketchfab.com/3d-models/mario-kart-item-box-8f6a2b6b17b844c5b5dfa38375289975
   const gltf = useLoader(GLTFLoader, itemBox);
-  const [rotation, setRotation] = useState<Euler>(new Euler(0, 0, 0));
+
   useEffect(() => {
     gltf.scene.scale.multiplyScalar(0.02);
   }, []);

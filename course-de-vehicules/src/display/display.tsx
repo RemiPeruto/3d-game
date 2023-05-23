@@ -27,6 +27,13 @@ export type VehiculeInformations = {
   };
 };
 
+export type BoiteRotationInformations = {
+  boite: {
+    rotation: Euler;
+    setRotation: (value: Euler) => void;
+  };
+};
+
 export type Action = "forward" | "backward" | "left" | "right";
 
 const actionMapKeys: Record<Action, string[]> = {
@@ -51,6 +58,8 @@ const Display = () => {
   const [xScale, setXScale] = useState(1);
   const [yScale, setYScale] = useState(1);
   const [zScale, setZScale] = useState(1);
+
+  const [boiteRotation, setBoiteRotation] = useState<Euler>(new Euler(0, 0, 0));
 
   const [actionMapActive, setActionMapActive] = useState<
     Record<Action, boolean>
@@ -140,6 +149,7 @@ const Display = () => {
         }}
         actionMapActive={actionMapActive}
         renderFunction={renderFunction}
+        boite={{ rotation: boiteRotation, setRotation: setBoiteRotation }}
       />
       <Controls
         informations={{
@@ -167,6 +177,7 @@ const Display = () => {
           keyMapAction,
           isControl,
         }}
+        boite={{ rotation: boiteRotation, setRotation: setBoiteRotation }}
       />
     </DisplayContainer>
   );
